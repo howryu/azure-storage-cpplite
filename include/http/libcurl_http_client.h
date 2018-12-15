@@ -226,11 +226,15 @@ namespace azure {  namespace storage_lite {
     class CurlEasyClient : public std::enable_shared_from_this<CurlEasyClient>
     {
     public:
-        CurlEasyClient(int size) : m_size(size)
+        CurlEasyClient(int size, char *ca_info=nullptr) : m_size(size)
         {
             curl_global_init(CURL_GLOBAL_DEFAULT);
             for (int i = 0; i < m_size; i++) {
                 CURL *h = curl_easy_init();
+                if (ca_info != nullptr)
+                {
+                    curl_easy_setopt(h, CURLOPT_CAINFO, ca_info);
+                }
                 m_handles.push(h);
             }
         }

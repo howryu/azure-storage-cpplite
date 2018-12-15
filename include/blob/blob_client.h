@@ -33,11 +33,12 @@ namespace azure { namespace storage_lite {
         /// </summary>
         /// <param name="account">An existing <see cref="azure::storage_lite::storage_account" /> object.</param>
         /// <param name="max_concurrency">An int value indicates the maximum concurrency expected during execute requests against the service.</param>
-        blob_client(std::shared_ptr<storage_account> account, int max_concurrency)
+        /// <param name="ca_info">Path to a file which contains ca bundle</param>
+        blob_client(std::shared_ptr<storage_account> account, int max_concurrency, char *ca_info=nullptr)
             : m_account(account)
         {
             m_context = std::make_shared<executor_context>(std::make_shared<tinyxml2_parser>(), std::make_shared<retry_policy>());
-            m_client = std::make_shared<CurlEasyClient>(max_concurrency);
+            m_client = std::make_shared<CurlEasyClient>(max_concurrency, ca_info);
         }
 
         /// <summary>
